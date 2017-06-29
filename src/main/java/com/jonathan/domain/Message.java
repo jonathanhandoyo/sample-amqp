@@ -13,13 +13,8 @@ public class Message {
     private String id;
     private Long timestamp;
 
-    @Transient
-    private Conversation conversation;
-    private String conversationId;
-
-    @Transient
-    private User originator;
-    private String originatorId;
+    private String conversation;
+    private String originator;
 
     private String contentType;
     private String contentText;

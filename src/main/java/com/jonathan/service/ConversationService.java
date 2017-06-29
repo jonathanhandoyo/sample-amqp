@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class ConversationService {
@@ -20,14 +23,21 @@ public class ConversationService {
     private final WechatAdapter wechatAdapter;
     private final WhatsappAdapter whatsappAdapter;
 
+    public List<Conversation> findConversation(User.Provider.Key platform, User participant) {
+        Assert.notNull(platform, "Platform is null");
+        Assert.notNull(participant, "Participant is null");
+        Assert.notNull(participant.getId(), "Participant.id is null");
+
+        return this.conversationRepository.findAllByPlatformAndParticipantsIn(platform, participant.getId()).collect(Collectors.toList());
+    }
+
     public Conversation createConversation(User.Provider.Key platform, User creator) {
         Assert.notNull(platform, "Platform is null");
         Assert.notNull(creator, "Creator is null");
 
         Conversation conversation = new Conversation();
         conversation.setPlatform(platform);
-        conversation.getAdminIds().add(creator.getId());
-        conversation.getAdmins().add(creator);
+        conversation.getAdmins().add(creator.getId());
 
         //TODO: send to platform
 
@@ -41,8 +51,7 @@ public class ConversationService {
         Assert.notNull(admin, "Admin is null");
         Assert.notNull(admin.getId(), "Admin.id is null");
 
-        conversation.getAdminIds().add(admin.getId());
-        conversation.getAdmins().add(admin);
+        conversation.getAdmins().add(admin.getId());
 
         //TODO: send to platform
 
@@ -56,7 +65,6 @@ public class ConversationService {
         Assert.notNull(admin, "Admin is null");
         Assert.notNull(admin.getId(), "Admin.id is null");
 
-        conversation.getAdminIds().remove(admin.getId());
         conversation.getAdmins().remove(admin);
 
         //TODO: send to platform
@@ -71,8 +79,7 @@ public class ConversationService {
         Assert.notNull(participant, "Participant is null");
         Assert.notNull(participant.getId(), "Participant.id is null");
 
-        conversation.getParticipantIds().add(participant.getId());
-        conversation.getParticipants().add(participant);
+        conversation.getParticipants().add(participant.getId());
 
         //TODO: send to platform
 
@@ -86,8 +93,7 @@ public class ConversationService {
         Assert.notNull(participant, "Participant is null");
         Assert.notNull(participant.getId(), "Participant.id is null");
 
-        conversation.getParticipantIds().remove(participant.getId());
-        conversation.getParticipants().remove(participant);
+        conversation.getParticipants().remove(participant.getId());
 
         //TODO: send to platform
 
