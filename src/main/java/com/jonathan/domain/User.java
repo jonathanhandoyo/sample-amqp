@@ -23,7 +23,8 @@ public class User {
         public enum Key {
             FACEBOOK,
             SMS,
-            WECHAT
+            WECHAT,
+            WHATSAPP
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.jonathan.domain;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -8,17 +9,19 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Document(indexName = "chat-bot", type = "messages")
 public class Message {
 
-    public Long timestamp;
+    @Id
+    private String id;
+    private Long timestamp;
 
     @Transient
-    public Conversation conversation;
-    public String conversationId;
+    private Conversation conversation;
+    private String conversationId;
 
     @Transient
-    public User originator;
-    public String originatorId;
+    private User originator;
+    private String originatorId;
 
-    public String contentType;
-    public String contentText;
-    public byte[] contentBinary;
+    private String contentType;
+    private String contentText;
+    private byte[] contentBinary;
 }
